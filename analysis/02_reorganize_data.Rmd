@@ -1,0 +1,160 @@
+---
+title: "02_reorganize_data"
+author: "ogorodriguez"
+date: "2020-05-12"
+output: workflowr::wflow_html
+editor_options:
+  chunk_output_type: console
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  warning = FALSE, message = FALSE,
+  collapse = TRUE,
+  comment = "#>")
+suppressPackageStartupMessages(library(ggplot2))
+suppressPackageStartupMessages(library(tidyverse))
+theme_set(theme_light())
+
+```
+
+
+## Checking if update is required.
+
+The package googlespreadsheets4 is used to read the data from the Data is Plural archive.  This package is causing some conflict with workflowr build project function.  A cached version of the file will be used.  This file is saved as .rds file in the data folder of this project.  It will help to see the date of the cached file to see if it is necessary an update.  This update will require going back to the introduction file, comment out the sheet reading sections and get it to update.
+
+
+```{r}
+# Check the date the cached file was created
+date_cached_created <- file.info(here::here("data","dip_cached.rds"))$ctime %>% 
+  lubridate::date()
+date_cached_created
+
+```
+
+```{r}
+# Check when the file was modified
+date_cached_modified <- file.info(here::here("data","dip_cached.rds"))$mtime %>% 
+  lubridate::date()
+date_cached_modified
+
+```
+
+The newsletter is sent weekly.  A good rule of thumb can be if the cached file is more than 15 days old, then it is recommended to update.
+
+```{r}
+days_since_cached <- lubridate::today() - date_cached_modified
+days_since_cached
+
+```
+
+We can have the system tell us if an update is recommended.
+
+```{r}
+# Source the function should_update from the /code folder
+source(here::here("code", "fnc_should_upate.R"))
+```
+
+```{r}
+# Check if an update is required.
+should_update(days_since_cached)
+```
+
+
+If an update is required, it will be necessery to run the code indicated in section **01 Introduction.**
+
+
+## Loading the data set
+
+The purpose here is to load the data and do the corresponding cleaning tasks if needed.
+
+```{r}
+# Read in the corresponding cached file in .rds format
+dip_raw <- read_rds(here::here("data", "dip_cached.rds"))
+
+```
+
+```{r}
+# Preview the 10 most recent dataset suggestions by Jeremy Singer-Vine
+dip_raw %>% tail(10)
+
+```
+
+
+
+### Data cleaning
+
+By looking at the resulting dip_raw data frame, we can see that most columns are character columns when obviously the edition column correspond to a date column.  Also, the position column is not necessarily a numeric column but actually a factor column that will help identify which type of entries are first, which seconde, etc.
+
+```{r}
+dip_raw_fix01 <- dip_raw %>% 
+  mutate(edition = lubridate::ymd(edition),
+         position_fct = as_factor(position),
+         month = lubridate::month(edition, label = TRUE)) %>% 
+  rename(position_dbl = position) %>% 
+  select(edition, month, position_dbl, position_fct, everything())
+
+dip_raw_fix01
+```
+
+There was a problem regarding the encoding of the text in the columns `headline` and `text.`  It is important to make sure that a good working version of the gargle package is used so it can sync with the googlesheets4 package.  These links will help solve the issue: [here](https://github.com/tidyverse/googlesheets4/issues/26), and [here.](https://github.com/tidyverse/googlesheets4/issues/121)  
+
+Now we can get a glimpse and skim of the dataset.
+
+```{r}
+dip_raw_fix01 %>% 
+  glimpse()
+```
+
+It shows again the new classes of the fix we did to the raw data
+
+
+skim
+
+```{r}
+dip_raw_fix01 %>% 
+  skimr::skim()
+```
+
+Not much info of value but it confirms that the pattern is the send 5 dataset recommendations in each newsletter ordered from one to 5.  Doing a quick check the newsletter is sent every wednesday.
+
+### The issue with the links column
+
+As we can see the data is not yet tidy enough.  It has a row per each data set recommendation, however, for each data set recommendation in the text column there is most of time more than one link recommended.  The idea would be to have each link in each corresponding row per dataset recommendation.  
+
+We need to find a way to expand that row so that we can each link separated.  Grouping by text column will help in analysis then.  Using separate_rows() from tidyr can help us separate the rows by the carriage return.
+
+We will create one group for links analysis.
+
+
+```{r}
+dip_links <- dip_raw_fix01 %>% 
+  tidyr::separate_rows(links, sep = "\n", convert = FALSE) 
+
+dip_links
+
+```
+
+### The issue with the text column
+
+And one set for text analysis.  One thing about the text column is many of them end up with a hat tip.  A hat tip is a mention to the person that pointed the author to the data set in turn.  It will be interesting to have a column where the hattips are indicated.  
+
+```{r}
+dip_texts <- dip_raw_fix01 %>% 
+  tidyr::separate(text,  into = c("text", "hattip_name"), sep = "(\\[h/t)", remove = FALSE) %>% 
+  mutate(hattip_name = str_remove_all(hattip_name, "]"))
+
+dip_texts
+
+```
+
+
+Now let's save both data frames and let's do some analysis with them.
+
+```{r}
+write_rds(dip_links, here::here("data", "dip_links.rds"))
+write_rds(dip_texts, here::here("data", "dip_texts.rds"))
+
+```
+
+

@@ -8,4 +8,9 @@ editor_options:
   chunk_output_type: console
 ---
 
-Welcome to my research website.
+Welcome to the website to [Jeremy's Singer-Vine´s Data is Plural](https://docs.google.com/spreadsheets/d/1wZhPLMCHKJvwOkP4juclhjFgqIY8fQFMemwKL2c64vk/edit#gid=0).
+
+Content
+
+ 1. [Introduction](01_introduction.html)
+ 2. [Reorganizing the data set](02_reorganize_data.html)

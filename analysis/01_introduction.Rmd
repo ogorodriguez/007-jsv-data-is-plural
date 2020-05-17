@@ -1,0 +1,101 @@
+---
+title: "DIP: The main spreadsheet"
+author: "ogorodriguez"
+date: "2020-05-01"
+output: workflowr::wflow_html
+editor_options:
+  chunk_output_type: console
+---
+
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  warning = FALSE, message = FALSE,
+  collapse = TRUE,
+  comment = "#>")
+suppressPackageStartupMessages(library(ggplot2))
+suppressPackageStartupMessages(library(tidyverse))
+theme_set(theme_light())
+
+```
+
+
+```{r}
+pacman::p_load(googlesheets4, 
+               tidyverse,
+               lubridate)
+
+```
+
+## Introducing Data is Plural
+
+Data is Plural is a project initiated by [Jeremy Singer-Vine](https://www.buzzfeednews.com/author/jsvine), data editor for BuzzFeed News investigative unit.  
+
+He curates a list of links that point to data sources of various origins and formats.  The list is a very vast google spreadsheet that goes all the way back to 2015, and it offers access to data sets for various types of analysis.  It is a mine for the data analyst and also for the researcher looking for data sets relevant to their fieldsl.  Data sets are suggested by other contributors too.  
+
+The list of datasets is sent about weekly via a newsletter email subscription.  The email is set up of paragraphs containing the description text and the links therein.  All links can be accessed via a google spreadsheet.
+
+Access to the spreadsheet is [via this url.](https://docs.google.com/spreadsheets/d/1wZhPLMCHKJvwOkP4juclhjFgqIY8fQFMemwKL2c64vk/edit#gid=0
+)  
+
+## What does the set look like?
+
+A glimpse of the data set can be found here.  
+
+```{r}
+# Connecting to the data set via url
+# Using the package googlesheets4 requires authentication.
+# Google authentication does not seem to work with the workflow.
+# The authentication once done will be an aid to save cached copy of the set
+# This should be commented out.
+
+# url <- "https://docs.google.com/spreadsheets/d/1wZhPLMCHKJvwOkP4juclhjFgqIY8fQFMemwKL2c64vk/edit#gid=0"
+# dip_glance_cached <- googlesheets4::read_sheet(url) %>% 
+# slice(sample(1:900, 6, replace=F))
+
+# write_rds(dip_glance_cached, here::here("data", "dip_glance_cached.rds"))
+
+dip_glance <- read_rds(here::here("data", "dip_glance_cached.rds"))
+
+dip_glance
+
+```
+
+## Description of the spreadsheet
+
+The spreadsheet is organized by date, title, a description of the text pointing to each link to a database, a column with the included links, there can be more than one per entry, and one final column with links to the reference sites of the people that contribute some of the links to the author.
+
+The names of the columns are: `r names(dip_glance)`
+
+  edition: date the newsletter was sent
+  position: position of the paragraph in the newsletter
+  headline: title of the paragraph entry
+  text: descriptive text of the paragraph.  It contains hyperlinks in the email version
+  links: urls of the links to the data sets.  They are separeted by /n in the archive version
+  hattips: urls of the links to the sources or webpages of the contribuitors.  Separated by /n if more than one.
+  
+## Main tasks
+
+The main tasks to perform to this file are tied to the main objective to have a more manageble place to find datasets via word tags, some reverse search as well or relationships between moments of the year and the types of links offered.  It will be a study of its author intent in a way via text analysis, exploratory data analysis, and any other mining I can get to do with this interesting set.
+
+1. Exploratory data analysis:  This will consist of date analysis, word count, histograms of word frequency, nature of the links if necessary.
+
+2. Data cleaning: The original set should be cleaned and rearranged so that we can have the links in the link column separated and easily identified.  
+
+3. Get insights into topics and dates, most frequent words used.  In short, doing some basic text analysis, even sentiment analysis based on dates and words used by dates.  Dates being a very important component here.  Exploratin may include also length of description.  Identifying names mentioned in hattips., etc.
+
+This is a set that can give a lot of options to find relationships if there are at any point.  
+
+This is a very free range project I am undertaking with the sole purpose of enjoying it and having fun discovering what can be mined.
+
+## Getting the cached copy of the data
+
+```{r}
+# Needs to be commented out when running the script to update
+# dip_cached<- googlesheets4::read_sheet(url)
+# write_rds(dip_cached, here::here("data", "dip_cached.rds"))
+```
+
+
+
+
