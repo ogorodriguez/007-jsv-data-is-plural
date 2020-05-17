@@ -1,0 +1,1057 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+<meta name="author" content="ogorodriguez" />
+
+<meta name="date" content="2020-05-12" />
+
+<title>02_reorganize_data</title>
+
+<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/cosmo.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/highlightjs-9.12.0/textmate.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+
+<link rel="icon" href="https://github.com/workflowr/workflowr-assets/raw/master/img/reproducible.png">
+<!-- Add a small amount of space between sections. -->
+<style type="text/css">
+div.section {
+  padding-top: 12px;
+}
+</style>
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css">
+  pre:not([class]) {
+    background-color: white;
+  }
+</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+<style type="text/css">
+h1 {
+  font-size: 34px;
+}
+h1.title {
+  font-size: 38px;
+}
+h2 {
+  font-size: 30px;
+}
+h3 {
+  font-size: 24px;
+}
+h4 {
+  font-size: 18px;
+}
+h5 {
+  font-size: 16px;
+}
+h6 {
+  font-size: 12px;
+}
+.table th:not([align]) {
+  text-align: left;
+}
+</style>
+
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+code {
+  color: inherit;
+  background-color: rgba(0, 0, 0, 0.04);
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+</style>
+
+
+<style type="text/css">
+/* padding for bootstrap navbar */
+body {
+  padding-top: 51px;
+  padding-bottom: 40px;
+}
+/* offset scroll position for anchor links (for fixed navbar)  */
+.section h1 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h2 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h3 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h4 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h5 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h6 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #ffffff;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script>
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.parent().addClass('active');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+
+
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+@media print {
+.toc-content {
+  /* see https://github.com/w3c/csswg-drafts/issues/4434 */
+  float: right;
+}
+}
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+
+</style>
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row-fluid">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">Jeremy Singer-Vine's Data is Plural</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">Home</a>
+</li>
+<li>
+  <a href="about.html">About</a>
+</li>
+<li>
+  <a href="license.html">License</a>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div class="fluid-row" id="header">
+
+
+
+<h1 class="title toc-ignore">02_reorganize_data</h1>
+<h4 class="author">ogorodriguez</h4>
+<h4 class="date">2020-05-12</h4>
+
+</div>
+
+
+<p>
+<button type="button" class="btn btn-default btn-workflowr btn-workflowr-report" data-toggle="collapse" data-target="#workflowr-report">
+<span class="glyphicon glyphicon-list" aria-hidden="true"></span> workflowr <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
+</button>
+</p>
+<div id="workflowr-report" class="collapse">
+<ul class="nav nav-tabs">
+<li class="active">
+<a data-toggle="tab" href="#summary">Summary</a>
+</li>
+<li>
+<a data-toggle="tab" href="#checks"> Checks <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> </a>
+</li>
+<li>
+<a data-toggle="tab" href="#versions">Past versions</a>
+</li>
+</ul>
+<div class="tab-content">
+<div id="summary" class="tab-pane fade in active">
+<p>
+<strong>Last updated:</strong> 2020-05-17
+</p>
+<p>
+<strong>Checks:</strong> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 7 <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span> 0
+</p>
+<p>
+<strong>Knit directory:</strong> <code>034_jsv-data-is-plural/</code> <span class="glyphicon glyphicon-question-sign" aria-hidden="true" title="This is the local directory in which the code in this file was executed."> </span>
+</p>
+<p>
+This reproducible <a href="http://rmarkdown.rstudio.com">R Markdown</a> analysis was created with <a
+  href="https://github.com/jdblischak/workflowr">workflowr</a> (version 1.6.2). The <em>Checks</em> tab describes the reproducibility checks that were applied when the results were created. The <em>Past versions</em> tab lists the development history.
+</p>
+<hr>
+</div>
+<div id="checks" class="tab-pane fade">
+<div id="workflowr-checks" class="panel-group">
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRMarkdownfilestronguptodate"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>R Markdown file:</strong> up-to-date </a>
+</p>
+</div>
+<div id="strongRMarkdownfilestronguptodate" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great! Since the R Markdown file has been committed to the Git repository, you know the exact version of the code that produced these results.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongEnvironmentstrongempty"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Environment:</strong> empty </a>
+</p>
+</div>
+<div id="strongEnvironmentstrongempty" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! The global environment was empty. Objects defined in the global environment can affect the analysis in your R Markdown file in unknown ways. For reproduciblity it’s best to always run the code in an empty environment.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongSeedstrongcodesetseed20200510code"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Seed:</strong> <code>set.seed(20200510)</code> </a>
+</p>
+</div>
+<div id="strongSeedstrongcodesetseed20200510code" class="panel-collapse collapse">
+<div class="panel-body">
+<p>The command <code>set.seed(20200510)</code> was run prior to running the code in the R Markdown file. Setting a seed ensures that any results that rely on randomness, e.g. subsampling or permutations, are reproducible.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongSessioninformationstrongrecorded"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Session information:</strong> recorded </a>
+</p>
+</div>
+<div id="strongSessioninformationstrongrecorded" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! Recording the operating system, R version, and package versions is critical for reproducibility.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongCachestrongnone"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Cache:</strong> none </a>
+</p>
+</div>
+<div id="strongCachestrongnone" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Nice! There were no cached chunks for this analysis, so you can be confident that you successfully produced the results during this run.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongFilepathsstrongrelative"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>File paths:</strong> relative </a>
+</p>
+</div>
+<div id="strongFilepathsstrongrelative" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! Using relative paths to the files within your workflowr project makes it easier to run your code on other machines.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrong337faac"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> 337faac </a>
+</p>
+</div>
+<div id="strongRepositoryversionstrong337faac" class="panel-collapse collapse">
+<div class="panel-body">
+<p>
+Great! You are using Git for version control. Tracking code development and connecting the code version to the results is critical for reproducibility.
+</p>
+<p>
+The results in this page were generated with repository version 337faac. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
+</p>
+<p>
+Note that you need to be careful to ensure that all relevant files for the analysis have been committed to Git prior to generating the results (you can use <code>wflow_publish</code> or <code>wflow_git_commit</code>). workflowr only checks the R Markdown file, but you know if there are other scripts or data files that it depends on. Below is the status of the Git repository when the results were generated:
+</p>
+<pre><code>
+Ignored files:
+    Ignored:    .Rhistory
+    Ignored:    .Rproj.user/
+
+Untracked files:
+    Untracked:  code/fnc_should_upate.R
+    Untracked:  data/dip_cached.rds
+    Untracked:  data/dip_glance_cached.rds
+    Untracked:  data/dip_links.rds
+    Untracked:  data/dip_texts.rds
+
+Unstaged changes:
+    Modified:   README.md
+
+</code></pre>
+<p>
+Note that any generated files, e.g. HTML, png, CSS, etc., are not included in this status report because it is ok for generated content to have uncommitted changes.
+</p>
+</div>
+</div>
+</div>
+</div>
+<hr>
+</div>
+<div id="versions" class="tab-pane fade">
+
+<p>
+These are the previous versions of the repository in which changes were made to the R Markdown (<code>analysis/02_reorganize_data.Rmd</code>) and HTML (<code>docs/02_reorganize_data.html</code>) files. If you’ve configured a remote Git repository (see <code>?wflow_git_remote</code>), click on the hyperlinks in the table below to view the files as they were in that past version.
+</p>
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+File
+</th>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+<th>
+Message
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+337faac
+</td>
+<td>
+ogorodriguez
+</td>
+<td>
+2020-05-17
+</td>
+<td>
+publish section 02 reorganize data
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<hr>
+</div>
+</div>
+</div>
+<div id="checking-if-update-is-required." class="section level2">
+<h2>Checking if update is required.</h2>
+<p>The package googlespreadsheets4 is used to read the data from the Data is Plural archive. This package is causing some conflict with workflowr build project function. A cached version of the file will be used. This file is saved as .rds file in the data folder of this project. It will help to see the date of the cached file to see if it is necessary an update. This update will require going back to the introduction file, comment out the sheet reading sections and get it to update.</p>
+<pre class="r"><code># Check the date the cached file was created
+date_cached_created &lt;- file.info(here::here(&quot;data&quot;,&quot;dip_cached.rds&quot;))$ctime %&gt;% 
+  lubridate::date()
+date_cached_created
+#&gt; [1] &quot;2020-05-12&quot;</code></pre>
+<pre class="r"><code># Check when the file was modified
+date_cached_modified &lt;- file.info(here::here(&quot;data&quot;,&quot;dip_cached.rds&quot;))$mtime %&gt;% 
+  lubridate::date()
+date_cached_modified
+#&gt; [1] &quot;2020-05-16&quot;</code></pre>
+<p>The newsletter is sent weekly. A good rule of thumb can be if the cached file is more than 15 days old, then it is recommended to update.</p>
+<pre class="r"><code>days_since_cached &lt;- lubridate::today() - date_cached_modified
+days_since_cached
+#&gt; Time difference of 1 days</code></pre>
+<p>We can have the system tell us if an update is recommended.</p>
+<pre class="r"><code># Source the function should_update from the /code folder
+source(here::here(&quot;code&quot;, &quot;fnc_should_upate.R&quot;))</code></pre>
+<pre class="r"><code># Check if an update is required.
+should_update(days_since_cached)
+#&gt; [1] &quot;No update required&quot;</code></pre>
+<p>If an update is required, it will be necessery to run the code indicated in section <strong>01 Introduction.</strong></p>
+</div>
+<div id="loading-the-data-set" class="section level2">
+<h2>Loading the data set</h2>
+<p>The purpose here is to load the data and do the corresponding cleaning tasks if needed.</p>
+<pre class="r"><code># Read in the corresponding cached file in .rds format
+dip_raw &lt;- read_rds(here::here(&quot;data&quot;, &quot;dip_cached.rds&quot;))</code></pre>
+<pre class="r"><code># Preview the 10 most recent dataset suggestions by Jeremy Singer-Vine
+dip_raw %&gt;% tail(10)
+#&gt; # A tibble: 10 x 6
+#&gt;    edition  position headline     text           links          hattips         
+#&gt;    &lt;chr&gt;       &lt;dbl&gt; &lt;chr&gt;        &lt;chr&gt;          &lt;chr&gt;          &lt;chr&gt;           
+#&gt;  1 2020.05~        1 Coronavirus~ Last week, th~ &quot;https://tiny~ &lt;NA&gt;            
+#&gt;  2 2020.05~        2 COVID-19 in~ The Marshall ~ &quot;https://www.~ &lt;NA&gt;            
+#&gt;  3 2020.05~        3 Essential N~ New York City~ &quot;https://www1~ https://tinylet~
+#&gt;  4 2020.05~        4 Space dolla~ The Planetary~ &quot;https://www.~ https://twitter~
+#&gt;  5 2020.05~        5 Love Island. Developer adv~ &quot;https://twit~ https://twitter~
+#&gt;  6 2020.05~        1 Employee pr~ The UN Intern~ &quot;https://eple~ &lt;NA&gt;            
+#&gt;  7 2020.05~        2 COVID stimu~ The nonprofit~ &quot;https://www.~ &lt;NA&gt;            
+#&gt;  8 2020.05~        3 National wi~ Since the pas~ &quot;https://wild~ &lt;NA&gt;            
+#&gt;  9 2020.05~        4 EU legislat~ Computer scie~ &quot;https://vict~ &lt;NA&gt;            
+#&gt; 10 2020.05~        5 Millions of~ Iowa’s Alcoho~ &quot;https://data~ https://twitter~</code></pre>
+<div id="data-cleaning" class="section level3">
+<h3>Data cleaning</h3>
+<p>By looking at the resulting dip_raw data frame, we can see that most columns are character columns when obviously the edition column correspond to a date column. Also, the position column is not necessarily a numeric column but actually a factor column that will help identify which type of entries are first, which seconde, etc.</p>
+<pre class="r"><code>dip_raw_fix01 &lt;- dip_raw %&gt;% 
+  mutate(edition = lubridate::ymd(edition),
+         position_fct = as_factor(position),
+         month = lubridate::month(edition, label = TRUE)) %&gt;% 
+  rename(position_dbl = position) %&gt;% 
+  select(edition, month, position_dbl, position_fct, everything())
+
+dip_raw_fix01
+#&gt; # A tibble: 985 x 8
+#&gt;    edition    month position_dbl position_fct headline   text    links  hattips 
+#&gt;    &lt;date&gt;     &lt;ord&gt;        &lt;dbl&gt; &lt;fct&gt;        &lt;chr&gt;      &lt;chr&gt;   &lt;chr&gt;  &lt;chr&gt;   
+#&gt;  1 2015-10-21 oct              1 1            Every pla~ &quot;Somet~ &quot;http~ https:/~
+#&gt;  2 2015-10-21 oct              2 2            “There’s ~ &quot;The H~ &quot;http~ &lt;NA&gt;    
+#&gt;  3 2015-10-21 oct              3 3            What poli~ &quot;The P~ &quot;http~ &lt;NA&gt;    
+#&gt;  4 2015-10-21 oct              4 4            How often~ &quot;The W~ &quot;http~ &lt;NA&gt;    
+#&gt;  5 2015-10-21 oct              5 5            Four year~ &quot;WNYC,~ &quot;http~ https:/~
+#&gt;  6 2015-10-28 oct              1 1            Data-sham~ &quot;If yo~ &quot;http~ https:/~
+#&gt;  7 2015-10-28 oct              2 2            The demog~ &quot;This ~ &quot;http~ &lt;NA&gt;    
+#&gt;  8 2015-10-28 oct              3 3            Where do ~ &quot;Most ~ &quot;http~ https:/~
+#&gt;  9 2015-10-28 oct              4 4            Finally, ~ &quot;Prior~ &quot;http~ https:/~
+#&gt; 10 2015-10-28 oct              5 5            Porn.      &quot;Sexua~ &quot;http~ &lt;NA&gt;    
+#&gt; # ... with 975 more rows</code></pre>
+<p>There was a problem regarding the encoding of the text in the columns <code>headline</code> and <code>text.</code> It is important to make sure that a good working version of the gargle package is used so it can sync with the googlesheets4 package. These links will help solve the issue: <a href="https://github.com/tidyverse/googlesheets4/issues/26">here</a>, and <a href="https://github.com/tidyverse/googlesheets4/issues/121">here.</a></p>
+<p>Now we can get a glimpse and skim of the dataset.</p>
+<pre class="r"><code>dip_raw_fix01 %&gt;% 
+  glimpse()
+#&gt; Rows: 985
+#&gt; Columns: 8
+#&gt; $ edition      &lt;date&gt; 2015-10-21, 2015-10-21, 2015-10-21, 2015-10-21, 2015-...
+#&gt; $ month        &lt;ord&gt; oct, oct, oct, oct, oct, oct, oct, oct, oct, oct, nov,...
+#&gt; $ position_dbl &lt;dbl&gt; 1, 2, 3, 4, 5, 1, 2, 3, 4, 5, 1, 2, 3, 4, 5, 1, 2, 3, ...
+#&gt; $ position_fct &lt;fct&gt; 1, 2, 3, 4, 5, 1, 2, 3, 4, 5, 1, 2, 3, 4, 5, 1, 2, 3, ...
+#&gt; $ headline     &lt;chr&gt; &quot;Every place name in the United States.&quot;, &quot;“There’s fi...
+#&gt; $ text         &lt;chr&gt; &quot;Sometimes, bureaucracy creates poetry. Since 1890, th...
+#&gt; $ links        &lt;chr&gt; &quot;http://geonames.usgs.gov/index.html\nhttp://geonames....
+#&gt; $ hattips      &lt;chr&gt; &quot;https://twitter.com/emilymbadger/status/6539828513863...</code></pre>
+<p>It shows again the new classes of the fix we did to the raw data</p>
+<p>skim</p>
+<pre class="r"><code>dip_raw_fix01 %&gt;% 
+  skimr::skim()</code></pre>
+<table>
+<caption>Data summary</caption>
+<tbody>
+<tr class="odd">
+<td align="left">Name</td>
+<td align="left">Piped data</td>
+</tr>
+<tr class="even">
+<td align="left">Number of rows</td>
+<td align="left">985</td>
+</tr>
+<tr class="odd">
+<td align="left">Number of columns</td>
+<td align="left">8</td>
+</tr>
+<tr class="even">
+<td align="left">_______________________</td>
+<td align="left"></td>
+</tr>
+<tr class="odd">
+<td align="left">Column type frequency:</td>
+<td align="left"></td>
+</tr>
+<tr class="even">
+<td align="left">character</td>
+<td align="left">4</td>
+</tr>
+<tr class="odd">
+<td align="left">Date</td>
+<td align="left">1</td>
+</tr>
+<tr class="even">
+<td align="left">factor</td>
+<td align="left">2</td>
+</tr>
+<tr class="odd">
+<td align="left">numeric</td>
+<td align="left">1</td>
+</tr>
+<tr class="even">
+<td align="left">________________________</td>
+<td align="left"></td>
+</tr>
+<tr class="odd">
+<td align="left">Group variables</td>
+<td align="left">None</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Variable type: character</strong></p>
+<table>
+<thead>
+<tr class="header">
+<th align="left">skim_variable</th>
+<th align="right">n_missing</th>
+<th align="right">complete_rate</th>
+<th align="right">min</th>
+<th align="right">max</th>
+<th align="right">empty</th>
+<th align="right">n_unique</th>
+<th align="right">whitespace</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">headline</td>
+<td align="right">0</td>
+<td align="right">1.00</td>
+<td align="right">4</td>
+<td align="right">85</td>
+<td align="right">0</td>
+<td align="right">981</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td align="left">text</td>
+<td align="right">0</td>
+<td align="right">1.00</td>
+<td align="right">32</td>
+<td align="right">1045</td>
+<td align="right">0</td>
+<td align="right">985</td>
+<td align="right">0</td>
+</tr>
+<tr class="odd">
+<td align="left">links</td>
+<td align="right">0</td>
+<td align="right">1.00</td>
+<td align="right">16</td>
+<td align="right">1466</td>
+<td align="right">0</td>
+<td align="right">985</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td align="left">hattips</td>
+<td align="right">386</td>
+<td align="right">0.61</td>
+<td align="right">20</td>
+<td align="right">258</td>
+<td align="right">0</td>
+<td align="right">546</td>
+<td align="right">0</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Variable type: Date</strong></p>
+<table>
+<thead>
+<tr class="header">
+<th align="left">skim_variable</th>
+<th align="right">n_missing</th>
+<th align="right">complete_rate</th>
+<th align="left">min</th>
+<th align="left">max</th>
+<th align="left">median</th>
+<th align="right">n_unique</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">edition</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="left">2015-10-21</td>
+<td align="left">2020-05-13</td>
+<td align="left">2017-12-27</td>
+<td align="right">197</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Variable type: factor</strong></p>
+<table>
+<thead>
+<tr class="header">
+<th align="left">skim_variable</th>
+<th align="right">n_missing</th>
+<th align="right">complete_rate</th>
+<th align="left">ordered</th>
+<th align="right">n_unique</th>
+<th align="left">top_counts</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">month</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="left">TRUE</td>
+<td align="right">12</td>
+<td align="left">abr: 100, ene: 95, feb: 90, mar: 90</td>
+</tr>
+<tr class="even">
+<td align="left">position_fct</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="left">FALSE</td>
+<td align="right">5</td>
+<td align="left">1: 197, 2: 197, 3: 197, 4: 197</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Variable type: numeric</strong></p>
+<table>
+<thead>
+<tr class="header">
+<th align="left">skim_variable</th>
+<th align="right">n_missing</th>
+<th align="right">complete_rate</th>
+<th align="right">mean</th>
+<th align="right">sd</th>
+<th align="right">p0</th>
+<th align="right">p25</th>
+<th align="right">p50</th>
+<th align="right">p75</th>
+<th align="right">p100</th>
+<th align="left">hist</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">position_dbl</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">3</td>
+<td align="right">1.41</td>
+<td align="right">1</td>
+<td align="right">2</td>
+<td align="right">3</td>
+<td align="right">4</td>
+<td align="right">5</td>
+<td align="left">▇▇▇▇▇</td>
+</tr>
+</tbody>
+</table>
+<p>Not much info of value but it confirms that the pattern is the send 5 dataset recommendations in each newsletter ordered from one to 5. Doing a quick check the newsletter is sent every wednesday.</p>
+</div>
+<div id="the-issue-with-the-links-column" class="section level3">
+<h3>The issue with the links column</h3>
+<p>As we can see the data is not yet tidy enough. It has a row per each data set recommendation, however, for each data set recommendation in the text column there is most of time more than one link recommended. The idea would be to have each link in each corresponding row per dataset recommendation.</p>
+<p>We need to find a way to expand that row so that we can each link separated. Grouping by text column will help in analysis then. Using separate_rows() from tidyr can help us separate the rows by the carriage return.</p>
+<p>We will create one group for links analysis.</p>
+<pre class="r"><code>dip_links &lt;- dip_raw_fix01 %&gt;% 
+  tidyr::separate_rows(links, sep = &quot;\n&quot;, convert = FALSE) 
+
+dip_links
+#&gt; # A tibble: 3,530 x 8
+#&gt;    edition    month position_dbl position_fct headline   text    links  hattips 
+#&gt;    &lt;date&gt;     &lt;ord&gt;        &lt;dbl&gt; &lt;fct&gt;        &lt;chr&gt;      &lt;chr&gt;   &lt;chr&gt;  &lt;chr&gt;   
+#&gt;  1 2015-10-21 oct              1 1            Every pla~ &quot;Somet~ http:~ https:/~
+#&gt;  2 2015-10-21 oct              1 1            Every pla~ &quot;Somet~ http:~ https:/~
+#&gt;  3 2015-10-21 oct              1 1            Every pla~ &quot;Somet~ https~ https:/~
+#&gt;  4 2015-10-21 oct              2 2            “There’s ~ &quot;The H~ http:~ &lt;NA&gt;    
+#&gt;  5 2015-10-21 oct              2 2            “There’s ~ &quot;The H~ https~ &lt;NA&gt;    
+#&gt;  6 2015-10-21 oct              3 3            What poli~ &quot;The P~ https~ &lt;NA&gt;    
+#&gt;  7 2015-10-21 oct              3 3            What poli~ &quot;The P~ http:~ &lt;NA&gt;    
+#&gt;  8 2015-10-21 oct              4 4            How often~ &quot;The W~ https~ &lt;NA&gt;    
+#&gt;  9 2015-10-21 oct              5 5            Four year~ &quot;WNYC,~ https~ https:/~
+#&gt; 10 2015-10-21 oct              5 5            Four year~ &quot;WNYC,~ http:~ https:/~
+#&gt; # ... with 3,520 more rows</code></pre>
+</div>
+<div id="the-issue-with-the-text-column" class="section level3">
+<h3>The issue with the text column</h3>
+<p>And one set for text analysis. One thing about the text column is many of them end up with a hat tip. A hat tip is a mention to the person that pointed the author to the data set in turn. It will be interesting to have a column where the hattips are indicated.</p>
+<pre class="r"><code>dip_texts &lt;- dip_raw_fix01 %&gt;% 
+  tidyr::separate(text,  into = c(&quot;text&quot;, &quot;hattip_name&quot;), sep = &quot;(\\[h/t)&quot;, remove = FALSE) %&gt;% 
+  mutate(hattip_name = str_remove_all(hattip_name, &quot;]&quot;))
+
+dip_texts
+#&gt; # A tibble: 985 x 9
+#&gt;    edition    month position_dbl position_fct headline links text  hattip_name
+#&gt;    &lt;date&gt;     &lt;ord&gt;        &lt;dbl&gt; &lt;fct&gt;        &lt;chr&gt;    &lt;chr&gt; &lt;chr&gt; &lt;chr&gt;      
+#&gt;  1 2015-10-21 oct              1 1            Every p~ &quot;htt~ &quot;Som~ &quot; @emilymb~
+#&gt;  2 2015-10-21 oct              2 2            “There’~ &quot;htt~ &quot;The~  &lt;NA&gt;      
+#&gt;  3 2015-10-21 oct              3 3            What po~ &quot;htt~ &quot;The~  &lt;NA&gt;      
+#&gt;  4 2015-10-21 oct              4 4            How oft~ &quot;htt~ &quot;The~  &lt;NA&gt;      
+#&gt;  5 2015-10-21 oct              5 5            Four ye~ &quot;htt~ &quot;WNY~ &quot; @veltman&quot;
+#&gt;  6 2015-10-28 oct              1 1            Data-sh~ &quot;htt~ &quot;If ~ &quot; Shale Cr~
+#&gt;  7 2015-10-28 oct              2 2            The dem~ &quot;htt~ &quot;Thi~  &lt;NA&gt;      
+#&gt;  8 2015-10-28 oct              3 3            Where d~ &quot;htt~ &quot;Mos~ &quot; Steven R~
+#&gt;  9 2015-10-28 oct              4 4            Finally~ &quot;htt~ &quot;Pri~ &quot; Noah Vel~
+#&gt; 10 2015-10-28 oct              5 5            Porn.    &quot;htt~ &quot;Sex~  &lt;NA&gt;      
+#&gt; # ... with 975 more rows, and 1 more variable: hattips &lt;chr&gt;</code></pre>
+<p>Now let’s save both data frames and let’s do some analysis with them.</p>
+<pre class="r"><code>write_rds(dip_links, here::here(&quot;data&quot;, &quot;dip_links.rds&quot;))
+write_rds(dip_texts, here::here(&quot;data&quot;, &quot;dip_texts.rds&quot;))</code></pre>
+<br>
+<p>
+<button type="button" class="btn btn-default btn-workflowr btn-workflowr-sessioninfo" data-toggle="collapse" data-target="#workflowr-sessioninfo" style="display: block;">
+<span class="glyphicon glyphicon-wrench" aria-hidden="true"></span> Session information
+</button>
+</p>
+<div id="workflowr-sessioninfo" class="collapse">
+<pre class="r"><code>sessionInfo()
+#&gt; R version 3.6.1 (2019-07-05)
+#&gt; Platform: x86_64-w64-mingw32/x64 (64-bit)
+#&gt; Running under: Windows 10 x64 (build 18362)
+#&gt; 
+#&gt; Matrix products: default
+#&gt; 
+#&gt; locale:
+#&gt; [1] LC_COLLATE=Spanish_Spain.1252  LC_CTYPE=Spanish_Spain.1252   
+#&gt; [3] LC_MONETARY=Spanish_Spain.1252 LC_NUMERIC=C                  
+#&gt; [5] LC_TIME=Spanish_Spain.1252    
+#&gt; 
+#&gt; attached base packages:
+#&gt; [1] stats     graphics  grDevices utils     datasets  methods   base     
+#&gt; 
+#&gt; other attached packages:
+#&gt; [1] forcats_0.5.0   stringr_1.4.0   dplyr_0.8.5     purrr_0.3.3    
+#&gt; [5] readr_1.3.1     tidyr_1.0.2     tibble_3.0.0    tidyverse_1.3.0
+#&gt; [9] ggplot2_3.3.0  
+#&gt; 
+#&gt; loaded via a namespace (and not attached):
+#&gt;  [1] Rcpp_1.0.4.6     lubridate_1.7.8  here_0.1         lattice_0.20-40 
+#&gt;  [5] assertthat_0.2.1 rprojroot_1.3-2  digest_0.6.25    utf8_1.1.4      
+#&gt;  [9] R6_2.4.1         cellranger_1.1.0 repr_1.1.0       backports_1.1.6 
+#&gt; [13] reprex_0.3.0     evaluate_0.14    highr_0.8        httr_1.4.1      
+#&gt; [17] pillar_1.4.3     rlang_0.4.6      readxl_1.3.1     rstudioapi_0.11 
+#&gt; [21] whisker_0.4      rmarkdown_2.1    munsell_0.5.0    broom_0.5.5     
+#&gt; [25] compiler_3.6.1   httpuv_1.5.2     modelr_0.1.6     xfun_0.12       
+#&gt; [29] pkgconfig_2.0.3  base64enc_0.1-3  htmltools_0.4.0  tidyselect_1.0.0
+#&gt; [33] workflowr_1.6.2  fansi_0.4.0      crayon_1.3.4     dbplyr_1.4.2    
+#&gt; [37] withr_2.2.0      later_1.0.0      grid_3.6.1       nlme_3.1-144    
+#&gt; [41] jsonlite_1.6.1   gtable_0.3.0     lifecycle_0.2.0  DBI_1.1.0       
+#&gt; [45] git2r_0.26.1     magrittr_1.5     scales_1.1.0     cli_2.0.2       
+#&gt; [49] stringi_1.4.6    fs_1.4.1         promises_1.1.0   skimr_2.1       
+#&gt; [53] xml2_1.3.1       ellipsis_0.3.0   generics_0.0.2   vctrs_0.2.4     
+#&gt; [57] tools_3.6.1      glue_1.4.0       hms_0.5.3        yaml_2.2.1      
+#&gt; [61] colorspace_1.4-1 rvest_0.3.5      knitr_1.28       haven_2.2.0</code></pre>
+</div>
+</div>
+</div>
+
+
+<!-- Adjust MathJax settings so that all math formulae are shown using
+TeX fonts only; see
+http://docs.mathjax.org/en/latest/configuration.html.  This will make
+the presentation more consistent at the cost of the webpage sometimes
+taking slightly longer to load. Note that this only works because the
+footer is added to webpages before the MathJax javascript. -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    "HTML-CSS": { availableFonts: ["TeX"] }
+  });
+</script>
+
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open')
+  });
+});
+</script>
+
+<!-- code folding -->
+
+<script>
+$(document).ready(function ()  {
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_').toLowerCase();
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
