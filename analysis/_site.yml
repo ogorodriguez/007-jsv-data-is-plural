@@ -1,7 +1,7 @@
-name: "034_jsv-data-is-plural"
+name: 034_jsv-data-is-plural
 output_dir: ../docs
 navbar:
-  title: "Jeremy Singer-Vine's Data is Plural"
+  title: Jeremy Singer-Vine's Data is Plural
   left:
   - text: Home
     href: index.html
@@ -9,6 +9,10 @@ navbar:
     href: about.html
   - text: License
     href: license.html
+  right:
+  - icon: fa-github
+    text: Source code
+    href: https://github.com/ogorodriguez/034-jsv-data-is-plural
 output:
   workflowr::wflow_html:
     toc: yes
