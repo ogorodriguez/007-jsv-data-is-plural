@@ -158,3 +158,11 @@ write_rds(dip_texts, here::here("data", "dip_texts.rds"))
 ```
 
 
+```{r}
+dip_texts %>% 
+  count(hattip_name, sort = TRUE) %>% 
+  filter(n > 1) %>% View()
+```
+
+
+
