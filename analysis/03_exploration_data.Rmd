@@ -1,0 +1,43 @@
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  warning = FALSE, message = FALSE,
+  collapse = TRUE,
+  comment = "#>")
+suppressPackageStartupMessages(library(ggplot2))
+suppressPackageStartupMessages(library(tidyverse))
+theme_set(theme_light())
+
+```
+
+
+## Exploratory Data Analysis
+
+Now that we have the two sets of files to analyse either the links or the texts in the list of entries of Data is Plural, we can start playing with the sets to see what type of questions can we get from the data.
+
+I will bring in the sets I have saved as .rds files.
+
+```{r}
+dip_links <- read_rds(here::here("data", "dip_links.rds"))
+dip_texts <- read_rds(here::here("data", "dip_texts.rds"))
+```
+
+For example, for the links per entry we can see how many links can be found in each entry.  Some entries, or dataset recommendations, have either 1 or more links.  I want to know how the number of links per entry is distributed.
+
+
+```{r}
+dip_links %>% 
+  select(edition, text, links) %>% 
+  count(text, sort = FALSE) %>% 
+  ggplot(aes(n)) +
+    geom_histogram(stat = "count", , fill = "navy blue") +
+    theme_classic() +
+    theme(legend.position = "none") +
+    labs(title = "Links per entry",
+         subtitle = "Distribution of links per editions",
+         x = "Number of links",
+         y = "Count of entries")
+
+```
+
+In this graph we can see that close to 500 entries have between 2 or 3 links per entry.  The maximum of links (14 max) occurrs in one ocassion, where are having more than 10 is quite uncommon.  
+
