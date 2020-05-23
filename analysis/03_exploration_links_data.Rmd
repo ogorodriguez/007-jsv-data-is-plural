@@ -1,0 +1,145 @@
+---
+title: "03_exploration_links_data"
+author: "ogorodriguez"
+date: "2020-05-20"
+output: workflowr::wflow_html
+editor_options:
+  chunk_output_type: console
+---
+
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  warning = FALSE, message = FALSE,
+  collapse = TRUE,
+  comment = "#>")
+suppressPackageStartupMessages(library(ggplot2))
+suppressPackageStartupMessages(library(tidyverse))
+theme_set(theme_light())
+
+```
+
+
+## Links Exploratory Data Analysis
+
+Now that we have the two sets of files to analyse either the links or the texts in the list of entries of Data is Plural, we can start playing with the sets to see what type of questions can we get from the data.
+
+I will bring in the sets I have saved as .rds files.
+
+```{r}
+dip_links <- read_rds(here::here("data", "dip_links.rds"))
+dip_texts <- read_rds(here::here("data", "dip_texts.rds"))
+
+```
+
+## How many links does each entry have?
+
+Each entry for a recommended data set comes with the links to where it is located as well as for reference.  Those are found in the links column.  I wondered about the number of links that can be found in an entry.  A histogram can give us an idea of the distribution of links.  
+
+```{r}
+dip_links %>% 
+  select(edition, text, links) %>% 
+  count(text, sort = FALSE) %>% 
+  ggplot(aes(n)) +
+    geom_histogram(stat = "count", , fill = "navy blue") +
+    theme_classic() +
+    theme(legend.position = "none") +
+    labs(title = "Links per entry",
+         subtitle = "Distribution of links per entry",
+         x = "Number of links in an entry",
+         y = "Entries count")
+
+```
+
+The graphs shows that almost 500 entries have between 2 and 3 links associated.  Some entries have even more than 10 links.  One entry has 14 links included in them.  Interesting that from the 900+ entries, there is always a link ranging from 1 to 14 without any interruption.  
+
+Another way to represent this is via a boxplot to see the spread of the number of links in entries.  We will see the median values and the corresponding outliers.
+
+```{r}
+dip_links %>% 
+  select(edition, text, links) %>% 
+  count(text, sort = FALSE) %>% 
+  ggplot(aes(n, y = "")) +
+    geom_boxplot(colour = "#E52B50", size=1) +  # #E52B50 = Amaranth color
+    theme_classic() + 
+    theme(legend.position = "none",
+          axis.ticks.y = element_blank(),
+          axis.text.y=element_blank()) +
+    scale_x_continuous(breaks = seq(from = 0, to = 15, by = 1)) + 
+    labs(title = "Links per entry",
+         subtitle = "Distribution of links per entry",
+         x = "Number of links in an entry",
+         y = " ")
+  
+```
+
+
+### How many links per edition?
+
+We can also collect the number of links per edition (or date)
+
+
+```{r}
+dip_links %>% 
+  select(edition, text, links) %>% 
+  count(edition, sort = FALSE) %>% 
+  ggplot(aes(n)) +
+    geom_histogram(stat = "count", fill = "#30D5C8") +
+    theme_classic() +
+    theme(legend.position = "none") +
+    scale_x_continuous(breaks = seq(from = 0, to = 40, by = 1)) +
+    geom_vline(aes(xintercept = mean(n)),col = 'red',size = 0.5) +
+    geom_vline(aes(xintercept = median(n)),col = 'navy blue',size = 0.5) +
+    labs(title = "Links per edition",
+         subtitle = "Distribution of links per editions",
+         x = "Number of links in an edition",
+         y = "Edition count")
+
+```
+
+
+Boxplot
+
+```{r}
+dip_links %>% 
+  select(edition, text, links) %>% 
+  count(edition, sort = FALSE) %>% 
+  ggplot(aes(n, y = "")) +
+    geom_boxplot(colour = "#E52B50", size=1) +  # #E52B50 = Amaranth color
+    theme_classic() + 
+    theme(legend.position = "none",
+          axis.ticks.y = element_blank(),
+          axis.text.y=element_blank()) +
+    scale_x_continuous(breaks = seq(from = 0, to = 40, by = 1)) + 
+    geom_vline(aes(xintercept = mean(n)),col = 'navy blue',size = 0.5) +
+    labs(title = "Links per edition",
+         subtitle = "Distribution of links per edition",
+         x = "Number of links in an edition",
+         y = " ")
+  
+```
+
+In both graphs above we can see that mean and median values of the total number of links in an edition (newsletter is the same.)  Average number of links in a newsletter is 18.  And 50% of the number of newsletter have 18 links or less, 50% have 18 or more links.  It is a bit normally distributed.  There is a little skewness to the left.  
+
+Which is the edition with 36 links?
+
+```{r}
+dip_links %>% 
+  select(edition, text, links) %>% 
+  count(edition, sort = TRUE) %>% 
+  top_n(1)
+  
+```
+
+It is the edition of May 31, 2017.  Which entries or datasets it had?
+
+```{r}
+dip_texts %>% 
+  filter(edition == "2017-05-31") %>% 
+  select(position_fct, text, links, hattip_name, hattips) %>% 
+  gt::gt() %>% 
+    gt::cols_width(vars(text, links) ~ px(500))
+
+```
+
+
