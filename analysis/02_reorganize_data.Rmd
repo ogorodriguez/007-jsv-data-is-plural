@@ -1,5 +1,5 @@
 ---
-title: "02_reorganize_data"
+title: "Data Wrangling"
 author: "ogorodriguez"
 date: "2020-05-12"
 output: workflowr::wflow_html

@@ -1,5 +1,5 @@
 ---
-title: "03_exploration_links_data"
+title: "Exploring the links in Data is Plural"
 author: "ogorodriguez"
 date: "2020-05-20"
 output: workflowr::wflow_html
