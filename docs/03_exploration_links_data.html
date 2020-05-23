@@ -1,0 +1,1246 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+<meta name="author" content="ogorodriguez" />
+
+<meta name="date" content="2020-05-20" />
+
+<title>03_exploration_links_data</title>
+
+<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/cosmo.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/highlightjs-9.12.0/textmate.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+<link href="site_libs/font-awesome-5.1.0/css/all.css" rel="stylesheet" />
+<link href="site_libs/font-awesome-5.1.0/css/v4-shims.css" rel="stylesheet" />
+
+<link rel="icon" href="https://github.com/workflowr/workflowr-assets/raw/master/img/reproducible.png">
+<!-- Add a small amount of space between sections. -->
+<style type="text/css">
+div.section {
+  padding-top: 12px;
+}
+</style>
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css">
+  pre:not([class]) {
+    background-color: white;
+  }
+</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+<style type="text/css">
+h1 {
+  font-size: 34px;
+}
+h1.title {
+  font-size: 38px;
+}
+h2 {
+  font-size: 30px;
+}
+h3 {
+  font-size: 24px;
+}
+h4 {
+  font-size: 18px;
+}
+h5 {
+  font-size: 16px;
+}
+h6 {
+  font-size: 12px;
+}
+.table th:not([align]) {
+  text-align: left;
+}
+</style>
+
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+code {
+  color: inherit;
+  background-color: rgba(0, 0, 0, 0.04);
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+</style>
+
+
+<style type="text/css">
+/* padding for bootstrap navbar */
+body {
+  padding-top: 51px;
+  padding-bottom: 40px;
+}
+/* offset scroll position for anchor links (for fixed navbar)  */
+.section h1 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h2 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h3 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h4 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h5 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h6 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #ffffff;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script>
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.parent().addClass('active');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+
+
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+@media print {
+.toc-content {
+  /* see https://github.com/w3c/csswg-drafts/issues/4434 */
+  float: right;
+}
+}
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+
+</style>
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row-fluid">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">Jeremy Singer-Vine's Data is Plural</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">Home</a>
+</li>
+<li>
+  <a href="about.html">About</a>
+</li>
+<li>
+  <a href="license.html">License</a>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li>
+  <a href="https://github.com/ogorodriguez/034-jsv-data-is-plural">
+    <span class="fa fa-github"></span>
+     
+    Source code
+  </a>
+</li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div class="fluid-row" id="header">
+
+
+
+<h1 class="title toc-ignore">03_exploration_links_data</h1>
+<h4 class="author">ogorodriguez</h4>
+<h4 class="date">2020-05-20</h4>
+
+</div>
+
+
+<p>
+<button type="button" class="btn btn-default btn-workflowr btn-workflowr-report" data-toggle="collapse" data-target="#workflowr-report">
+<span class="glyphicon glyphicon-list" aria-hidden="true"></span> workflowr <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
+</button>
+</p>
+<div id="workflowr-report" class="collapse">
+<ul class="nav nav-tabs">
+<li class="active">
+<a data-toggle="tab" href="#summary">Summary</a>
+</li>
+<li>
+<a data-toggle="tab" href="#checks"> Checks <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> </a>
+</li>
+<li>
+<a data-toggle="tab" href="#versions">Past versions</a>
+</li>
+</ul>
+<div class="tab-content">
+<div id="summary" class="tab-pane fade in active">
+<p>
+<strong>Last updated:</strong> 2020-05-23
+</p>
+<p>
+<strong>Checks:</strong> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 7 <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span> 0
+</p>
+<p>
+<strong>Knit directory:</strong> <code>034_jsv-data-is-plural/</code> <span class="glyphicon glyphicon-question-sign" aria-hidden="true" title="This is the local directory in which the code in this file was executed."> </span>
+</p>
+<p>
+This reproducible <a href="http://rmarkdown.rstudio.com">R Markdown</a> analysis was created with <a
+  href="https://github.com/jdblischak/workflowr">workflowr</a> (version 1.6.2). The <em>Checks</em> tab describes the reproducibility checks that were applied when the results were created. The <em>Past versions</em> tab lists the development history.
+</p>
+<hr>
+</div>
+<div id="checks" class="tab-pane fade">
+<div id="workflowr-checks" class="panel-group">
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRMarkdownfilestronguptodate"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>R Markdown file:</strong> up-to-date </a>
+</p>
+</div>
+<div id="strongRMarkdownfilestronguptodate" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great! Since the R Markdown file has been committed to the Git repository, you know the exact version of the code that produced these results.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongEnvironmentstrongempty"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Environment:</strong> empty </a>
+</p>
+</div>
+<div id="strongEnvironmentstrongempty" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! The global environment was empty. Objects defined in the global environment can affect the analysis in your R Markdown file in unknown ways. For reproduciblity it’s best to always run the code in an empty environment.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongSeedstrongcodesetseed20200510code"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Seed:</strong> <code>set.seed(20200510)</code> </a>
+</p>
+</div>
+<div id="strongSeedstrongcodesetseed20200510code" class="panel-collapse collapse">
+<div class="panel-body">
+<p>The command <code>set.seed(20200510)</code> was run prior to running the code in the R Markdown file. Setting a seed ensures that any results that rely on randomness, e.g. subsampling or permutations, are reproducible.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongSessioninformationstrongrecorded"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Session information:</strong> recorded </a>
+</p>
+</div>
+<div id="strongSessioninformationstrongrecorded" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! Recording the operating system, R version, and package versions is critical for reproducibility.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongCachestrongnone"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Cache:</strong> none </a>
+</p>
+</div>
+<div id="strongCachestrongnone" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Nice! There were no cached chunks for this analysis, so you can be confident that you successfully produced the results during this run.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongFilepathsstrongrelative"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>File paths:</strong> relative </a>
+</p>
+</div>
+<div id="strongFilepathsstrongrelative" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! Using relative paths to the files within your workflowr project makes it easier to run your code on other machines.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomogorodriguez034jsvdataispluraltree9e05f1a7e40fc793c96bea75496a6969d5d82502targetblank9e05f1aa"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/ogorodriguez/034-jsv-data-is-plural/tree/9e05f1a7e40fc793c96bea75496a6969d5d82502" target="_blank">9e05f1a</a> </a>
+</p>
+</div>
+<div id="strongRepositoryversionstrongahrefhttpsgithubcomogorodriguez034jsvdataispluraltree9e05f1a7e40fc793c96bea75496a6969d5d82502targetblank9e05f1aa" class="panel-collapse collapse">
+<div class="panel-body">
+<p>
+Great! You are using Git for version control. Tracking code development and connecting the code version to the results is critical for reproducibility.
+</p>
+<p>
+The results in this page were generated with repository version <a href="https://github.com/ogorodriguez/034-jsv-data-is-plural/tree/9e05f1a7e40fc793c96bea75496a6969d5d82502" target="_blank">9e05f1a</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
+</p>
+<p>
+Note that you need to be careful to ensure that all relevant files for the analysis have been committed to Git prior to generating the results (you can use <code>wflow_publish</code> or <code>wflow_git_commit</code>). workflowr only checks the R Markdown file, but you know if there are other scripts or data files that it depends on. Below is the status of the Git repository when the results were generated:
+</p>
+<pre><code>
+Ignored files:
+    Ignored:    .Rhistory
+    Ignored:    .Rproj.user/
+
+Untracked files:
+    Untracked:  code/fnc_should_upate.R
+    Untracked:  data/dip_cached.rds
+    Untracked:  data/dip_glance_cached.rds
+    Untracked:  data/dip_links.rds
+    Untracked:  data/dip_texts.rds
+
+Unstaged changes:
+    Modified:   README.md
+    Deleted:    analysis/03_exploration_data.Rmd
+
+</code></pre>
+<p>
+Note that any generated files, e.g. HTML, png, CSS, etc., are not included in this status report because it is ok for generated content to have uncommitted changes.
+</p>
+</div>
+</div>
+</div>
+</div>
+<hr>
+</div>
+<div id="versions" class="tab-pane fade">
+
+<p>
+These are the previous versions of the repository in which changes were made to the R Markdown (<code>analysis/03_exploration_links_data.Rmd</code>) and HTML (<code>docs/03_exploration_links_data.html</code>) files. If you’ve configured a remote Git repository (see <code>?wflow_git_remote</code>), click on the hyperlinks in the table below to view the files as they were in that past version.
+</p>
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+File
+</th>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+<th>
+Message
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/ogorodriguez/034-jsv-data-is-plural/blob/9e05f1a7e40fc793c96bea75496a6969d5d82502/analysis/03_exploration_links_data.Rmd" target="_blank">9e05f1a</a>
+</td>
+<td>
+ogorodriguez
+</td>
+<td>
+2020-05-23
+</td>
+<td>
+making sure all is updated with recent changes
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<hr>
+</div>
+</div>
+</div>
+<div id="links-exploratory-data-analysis" class="section level2">
+<h2>Links Exploratory Data Analysis</h2>
+<p>Now that we have the two sets of files to analyse either the links or the texts in the list of entries of Data is Plural, we can start playing with the sets to see what type of questions can we get from the data.</p>
+<p>I will bring in the sets I have saved as .rds files.</p>
+<pre class="r"><code>dip_links &lt;- read_rds(here::here(&quot;data&quot;, &quot;dip_links.rds&quot;))
+dip_texts &lt;- read_rds(here::here(&quot;data&quot;, &quot;dip_texts.rds&quot;))</code></pre>
+</div>
+<div id="how-many-links-does-each-entry-have" class="section level2">
+<h2>How many links does each entry have?</h2>
+<p>Each entry for a recommended data set comes with the links to where it is located as well as for reference. Those are found in the links column. I wondered about the number of links that can be found in an entry. A histogram can give us an idea of the distribution of links.</p>
+<pre class="r"><code>dip_links %&gt;% 
+  select(edition, text, links) %&gt;% 
+  count(text, sort = FALSE) %&gt;% 
+  ggplot(aes(n)) +
+    geom_histogram(stat = &quot;count&quot;, , fill = &quot;navy blue&quot;) +
+    theme_classic() +
+    theme(legend.position = &quot;none&quot;) +
+    labs(title = &quot;Links per entry&quot;,
+         subtitle = &quot;Distribution of links per entry&quot;,
+         x = &quot;Number of links in an entry&quot;,
+         y = &quot;Entries count&quot;)</code></pre>
+<p><img src="figure/03_exploration_links_data.Rmd/unnamed-chunk-3-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>The graphs shows that almost 500 entries have between 2 and 3 links associated. Some entries have even more than 10 links. One entry has 14 links included in them. Interesting that from the 900+ entries, there is always a link ranging from 1 to 14 without any interruption.</p>
+<p>Another way to represent this is via a boxplot to see the spread of the number of links in entries. We will see the median values and the corresponding outliers.</p>
+<pre class="r"><code>dip_links %&gt;% 
+  select(edition, text, links) %&gt;% 
+  count(text, sort = FALSE) %&gt;% 
+  ggplot(aes(n, y = &quot;&quot;)) +
+    geom_boxplot(colour = &quot;#E52B50&quot;, size=1) +  # #E52B50 = Amaranth color
+    theme_classic() + 
+    theme(legend.position = &quot;none&quot;,
+          axis.ticks.y = element_blank(),
+          axis.text.y=element_blank()) +
+    scale_x_continuous(breaks = seq(from = 0, to = 15, by = 1)) + 
+    labs(title = &quot;Links per entry&quot;,
+         subtitle = &quot;Distribution of links per entry&quot;,
+         x = &quot;Number of links in an entry&quot;,
+         y = &quot; &quot;)</code></pre>
+<p><img src="figure/03_exploration_links_data.Rmd/unnamed-chunk-4-1.png" width="672" style="display: block; margin: auto;" /></p>
+<div id="how-many-links-per-edition" class="section level3">
+<h3>How many links per edition?</h3>
+<p>We can also collect the number of links per edition (or date)</p>
+<pre class="r"><code>dip_links %&gt;% 
+  select(edition, text, links) %&gt;% 
+  count(edition, sort = FALSE) %&gt;% 
+  ggplot(aes(n)) +
+    geom_histogram(stat = &quot;count&quot;, fill = &quot;#30D5C8&quot;) +
+    theme_classic() +
+    theme(legend.position = &quot;none&quot;) +
+    scale_x_continuous(breaks = seq(from = 0, to = 40, by = 1)) +
+    geom_vline(aes(xintercept = mean(n)),col = &#39;red&#39;,size = 0.5) +
+    geom_vline(aes(xintercept = median(n)),col = &#39;navy blue&#39;,size = 0.5) +
+    labs(title = &quot;Links per edition&quot;,
+         subtitle = &quot;Distribution of links per editions&quot;,
+         x = &quot;Number of links in an edition&quot;,
+         y = &quot;Edition count&quot;)</code></pre>
+<p><img src="figure/03_exploration_links_data.Rmd/unnamed-chunk-5-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>Boxplot</p>
+<pre class="r"><code>dip_links %&gt;% 
+  select(edition, text, links) %&gt;% 
+  count(edition, sort = FALSE) %&gt;% 
+  ggplot(aes(n, y = &quot;&quot;)) +
+    geom_boxplot(colour = &quot;#E52B50&quot;, size=1) +  # #E52B50 = Amaranth color
+    theme_classic() + 
+    theme(legend.position = &quot;none&quot;,
+          axis.ticks.y = element_blank(),
+          axis.text.y=element_blank()) +
+    scale_x_continuous(breaks = seq(from = 0, to = 40, by = 1)) + 
+    geom_vline(aes(xintercept = mean(n)),col = &#39;navy blue&#39;,size = 0.5) +
+    labs(title = &quot;Links per edition&quot;,
+         subtitle = &quot;Distribution of links per edition&quot;,
+         x = &quot;Number of links in an edition&quot;,
+         y = &quot; &quot;)</code></pre>
+<p><img src="figure/03_exploration_links_data.Rmd/unnamed-chunk-6-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>In both graphs above we can see that mean and median values of the total number of links in an edition (newsletter is the same.) Average number of links in a newsletter is 18. And 50% of the number of newsletter have 18 links or less, 50% have 18 or more links. It is a bit normally distributed. There is a little skewness to the left.</p>
+<p>Which is the edition with 36 links?</p>
+<pre class="r"><code>dip_links %&gt;% 
+  select(edition, text, links) %&gt;% 
+  count(edition, sort = TRUE) %&gt;% 
+  top_n(1)
+#&gt; # A tibble: 1 x 2
+#&gt;   edition        n
+#&gt;   &lt;date&gt;     &lt;int&gt;
+#&gt; 1 2017-05-31    35</code></pre>
+<p>It is the edition of May 31, 2017. Which entries or datasets it had?</p>
+<pre class="r"><code>dip_texts %&gt;% 
+  filter(edition == &quot;2017-05-31&quot;) %&gt;% 
+  select(position_fct, text, links, hattip_name, hattips) %&gt;% 
+  gt::gt() %&gt;% 
+    gt::cols_width(vars(text, links) ~ px(500))</code></pre>
+<style>html {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Helvetica Neue', 'Fira Sans', 'Droid Sans', Arial, sans-serif;
+}
+
+#tpsrgfnrfa .gt_table {
+  display: table;
+  border-collapse: collapse;
+  margin-left: auto;
+  margin-right: auto;
+  color: #333333;
+  font-size: 16px;
+  background-color: #FFFFFF;
+  width: auto;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #A8A8A8;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #A8A8A8;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+}
+
+#tpsrgfnrfa .gt_heading {
+  background-color: #FFFFFF;
+  text-align: center;
+  border-bottom-color: #FFFFFF;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#tpsrgfnrfa .gt_title {
+  color: #333333;
+  font-size: 125%;
+  font-weight: initial;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  border-bottom-color: #FFFFFF;
+  border-bottom-width: 0;
+}
+
+#tpsrgfnrfa .gt_subtitle {
+  color: #333333;
+  font-size: 85%;
+  font-weight: initial;
+  padding-top: 0;
+  padding-bottom: 4px;
+  border-top-color: #FFFFFF;
+  border-top-width: 0;
+}
+
+#tpsrgfnrfa .gt_bottom_border {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#tpsrgfnrfa .gt_col_headings {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#tpsrgfnrfa .gt_col_heading {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 6px;
+  padding-left: 5px;
+  padding-right: 5px;
+  overflow-x: hidden;
+}
+
+#tpsrgfnrfa .gt_column_spanner_outer {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  padding-top: 0;
+  padding-bottom: 0;
+  padding-left: 4px;
+  padding-right: 4px;
+}
+
+#tpsrgfnrfa .gt_column_spanner_outer:first-child {
+  padding-left: 0;
+}
+
+#tpsrgfnrfa .gt_column_spanner_outer:last-child {
+  padding-right: 0;
+}
+
+#tpsrgfnrfa .gt_column_spanner {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 6px;
+  overflow-x: hidden;
+  display: inline-block;
+  width: 100%;
+}
+
+#tpsrgfnrfa .gt_group_heading {
+  padding: 8px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+}
+
+#tpsrgfnrfa .gt_empty_group_heading {
+  padding: 0.5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: middle;
+}
+
+#tpsrgfnrfa .gt_striped {
+  background-color: rgba(128, 128, 128, 0.05);
+}
+
+#tpsrgfnrfa .gt_from_md > :first-child {
+  margin-top: 0;
+}
+
+#tpsrgfnrfa .gt_from_md > :last-child {
+  margin-bottom: 0;
+}
+
+#tpsrgfnrfa .gt_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  margin: 10px;
+  border-top-style: solid;
+  border-top-width: 1px;
+  border-top-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  overflow-x: hidden;
+}
+
+#tpsrgfnrfa .gt_stub {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 12px;
+}
+
+#tpsrgfnrfa .gt_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#tpsrgfnrfa .gt_first_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+}
+
+#tpsrgfnrfa .gt_grand_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#tpsrgfnrfa .gt_first_grand_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-style: double;
+  border-top-width: 6px;
+  border-top-color: #D3D3D3;
+}
+
+#tpsrgfnrfa .gt_table_body {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#tpsrgfnrfa .gt_footnotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#tpsrgfnrfa .gt_footnote {
+  margin: 0px;
+  font-size: 90%;
+  padding: 4px;
+}
+
+#tpsrgfnrfa .gt_sourcenotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#tpsrgfnrfa .gt_sourcenote {
+  font-size: 90%;
+  padding: 4px;
+}
+
+#tpsrgfnrfa .gt_left {
+  text-align: left;
+}
+
+#tpsrgfnrfa .gt_center {
+  text-align: center;
+}
+
+#tpsrgfnrfa .gt_right {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+#tpsrgfnrfa .gt_font_normal {
+  font-weight: normal;
+}
+
+#tpsrgfnrfa .gt_font_bold {
+  font-weight: bold;
+}
+
+#tpsrgfnrfa .gt_font_italic {
+  font-style: italic;
+}
+
+#tpsrgfnrfa .gt_super {
+  font-size: 65%;
+}
+
+#tpsrgfnrfa .gt_footnote_marks {
+  font-style: italic;
+  font-size: 65%;
+}
+</style>
+<div id="tpsrgfnrfa" style="overflow-x:auto;overflow-y:auto;width:auto;height:auto;"><table class="gt_table" style="table-layout: fixed; width: 1300px">
+  <colgroup>
+    <col style="width: 100px"/>
+    <col style="width: 500px"/>
+    <col style="width: 500px"/>
+    <col style="width: 100px"/>
+    <col style="width: 100px"/>
+  </colgroup>
+  
+  <thead class="gt_col_headings">
+    <tr>
+      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1">position_fct</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1">text</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1">links</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1">hattip_name</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1">hattips</th>
+    </tr>
+  </thead>
+  <tbody class="gt_table_body">
+    <tr>
+      <td class="gt_row gt_center">1</td>
+      <td class="gt_row gt_left">Last week at BuzzFeed News, we shared a vast trove federal payroll data. Those records — provided by Office of Personnel Management through the Freedom of Information Act — cover more than 40 years and millions of employees. The dataset includes salaries, titles, job types, and demographic variables. In many-but-not-all cases (per OPM’s data release policies), it also includes names. Previously, federal payroll data had been searchable online, but very little was available in downloadable, analysis-friendly formats. Also: Many states – including New York, California, Florida, New Jersey, Minnesota, Arkansas, South Carolina, and Washington – proactively make payroll data available for download. (Some cities, such as Chicago, do, too.)</td>
+      <td class="gt_row gt_left">https://www.buzzfeed.com/jsvine/sharing-hundreds-of-millions-of-federal-payroll-records
+http://php.app.com/agent/federalemployees/search
+https://www.fedsdatacenter.com/federal-pay-rates/
+https://data.ny.gov/browse?tags=salaries%2Fpayroll&amp;utf8=%E2%9C%93
+http://publicpay.ca.gov/
+http://salaries.myflorida.com/
+http://www.yourmoney.nj.gov/transparency/payroll/
+https://mn.gov/mmb/transparency-mn/payrolldata.jsp
+https://www.ark.org/dfa/transparency/employee_compensation.php
+http://www.admin.sc.gov/accountability-portal/state-salaries
+http://fiscal.wa.gov/salaries.aspx
+http://fiscal.wa.gov/salaries.aspx
+https://data.cityofchicago.org/Administration-Finance/Current-Employee-Names-Salaries-and-Position-Title/xzkq-xp2w</td>
+      <td class="gt_row gt_left">NA</td>
+      <td class="gt_row gt_left">NA</td>
+    </tr>
+    <tr>
+      <td class="gt_row gt_center">2</td>
+      <td class="gt_row gt_left">U.S. lobbyists must notify Congress within 45 days of being retained by new clients. Every quarter after that, they’re required to file activity reports that detail the agencies they lobbied, the topics they covered, and the income they earned. Bulk downloads of both types of reports are available as XML files from the House (going back to 2004) and from the Senate (since 1999). Although they receive the same filings, each chamber “follows different data-cleaning, processing, and editing procedures before storing the data,” according to this recent GAO report.</td>
+      <td class="gt_row gt_left">http://disclosures.house.gov/ld/ldsearch.aspx
+https://www.senate.gov/legislative/Public_Disclosure/LDA_reports.htm
+http://www.gao.gov/products/GAO-16-320</td>
+      <td class="gt_row gt_left">NA</td>
+      <td class="gt_row gt_left">NA</td>
+    </tr>
+    <tr>
+      <td class="gt_row gt_center">3</td>
+      <td class="gt_row gt_left">A team of researchers at the Boston University School of Public Health has collected data on the presence/absence of 133 different types of firearm laws in each U.S. state, for each year between 1991 and 2016. The legal provisions are grouped into 14 categories, such as background checks, “Stand Your Ground” laws, and child access prevention. You can download a spreadsheet of the data, and also browse state-by-state summaries. Previously: The Correlates of State Policy Project (DIP 2016.07.06).</td>
+      <td class="gt_row gt_left">https://www.statefirearmlaws.org/about.html
+https://www.statefirearmlaws.org/
+https://www.statefirearmlaws.org/categories.html
+https://www.statefirearmlaws.org/table.html
+https://www.statefirearmlaws.org/state-by-state.html
+https://tinyletter.com/data-is-plural/letters/data-is-plural-2016-07-06-edition</td>
+      <td class="gt_row gt_left">NA</td>
+      <td class="gt_row gt_left">NA</td>
+    </tr>
+    <tr>
+      <td class="gt_row gt_center">4</td>
+      <td class="gt_row gt_left">Aswath Damodaran — a professor of finance at the NYU’s business school — maintains a trove of data on per-sector financials, including effective tax rates, return on equity, and working capital ratios by industry. For most datasets, Damodaran publishes both current and historical versions. </td>
+      <td class="gt_row gt_left">http://pages.stern.nyu.edu/~adamodar/New_Home_Page/
+http://pages.stern.nyu.edu/~adamodar/New_Home_Page/data.html
+http://pages.stern.nyu.edu/~adamodar/New_Home_Page/datafile/taxrate.htm
+http://pages.stern.nyu.edu/~adamodar/New_Home_Page/datafile/roe.html
+http://pages.stern.nyu.edu/~adamodar/New_Home_Page/datafile/wcdata.html
+http://pages.stern.nyu.edu/~adamodar/New_Home_Page/datacurrent.html
+http://pages.stern.nyu.edu/~adamodar/New_Home_Page/dataarchived.html</td>
+      <td class="gt_row gt_left"> Tim McGovern</td>
+      <td class="gt_row gt_left">https://twitter.com/herdingbats</td>
+    </tr>
+    <tr>
+      <td class="gt_row gt_center">5</td>
+      <td class="gt_row gt_left">You might have seen New York City’s bubble map of dog names. It turns out that the underlying dataset — which includes the name, gender, age as of 2015, breed, and borough of more than 110,000 dogs — is available on GitHub. You can also download slightly older, but more detailed data from WNYC’s Dogs of NYC project. That data includes each dog’s coat colors, whether it had been spayed/neutered, and its ZIP code. Related: Similar pet license data from Tacoma, Wash., and Edmonton, Canada. </td>
+      <td class="gt_row gt_left">http://a816-dohbesp.nyc.gov/IndicatorPublic/dognames/
+https://github.com/Kaz-A/dog_names/
+https://fusiontables.google.com/data?docid=1pKcxc8kzJbBVzLu_kgzoAMzqYhZyUhtScXjB0BQ#rows:id=1
+https://project.wnyc.org/dogs-of-nyc/
+https://data.cityoftacoma.org/Neighborhoods/Current-Pet-License-City-of-Tacoma-Fircrest/qnnn-t9wt
+https://data.edmonton.ca/Community-Services/Pet-Licenses-by-Neighbourhood/5squ-mg4w</td>
+      <td class="gt_row gt_left"> Alex P. Miller + Dan Nguyen</td>
+      <td class="gt_row gt_left">https://twitter.com/alexpmil/status/861703366203801600
+http://danwin.com/</td>
+    </tr>
+  </tbody>
+  
+  
+</table></div>
+<br>
+<p>
+<button type="button" class="btn btn-default btn-workflowr btn-workflowr-sessioninfo" data-toggle="collapse" data-target="#workflowr-sessioninfo" style="display: block;">
+<span class="glyphicon glyphicon-wrench" aria-hidden="true"></span> Session information
+</button>
+</p>
+<div id="workflowr-sessioninfo" class="collapse">
+<pre class="r"><code>sessionInfo()
+#&gt; R version 3.6.1 (2019-07-05)
+#&gt; Platform: x86_64-w64-mingw32/x64 (64-bit)
+#&gt; Running under: Windows 10 x64 (build 18362)
+#&gt; 
+#&gt; Matrix products: default
+#&gt; 
+#&gt; locale:
+#&gt; [1] LC_COLLATE=Spanish_Spain.1252  LC_CTYPE=Spanish_Spain.1252   
+#&gt; [3] LC_MONETARY=Spanish_Spain.1252 LC_NUMERIC=C                  
+#&gt; [5] LC_TIME=Spanish_Spain.1252    
+#&gt; 
+#&gt; attached base packages:
+#&gt; [1] stats     graphics  grDevices utils     datasets  methods   base     
+#&gt; 
+#&gt; other attached packages:
+#&gt; [1] forcats_0.5.0   stringr_1.4.0   dplyr_0.8.5     purrr_0.3.3    
+#&gt; [5] readr_1.3.1     tidyr_1.0.2     tibble_3.0.0    tidyverse_1.3.0
+#&gt; [9] ggplot2_3.3.0  
+#&gt; 
+#&gt; loaded via a namespace (and not attached):
+#&gt;  [1] Rcpp_1.0.4.6     lubridate_1.7.8  here_0.1         lattice_0.20-40 
+#&gt;  [5] assertthat_0.2.1 rprojroot_1.3-2  digest_0.6.25    utf8_1.1.4      
+#&gt;  [9] R6_2.4.1         cellranger_1.1.0 backports_1.1.6  reprex_0.3.0    
+#&gt; [13] evaluate_0.14    httr_1.4.1       pillar_1.4.3     rlang_0.4.6     
+#&gt; [17] readxl_1.3.1     rstudioapi_0.11  whisker_0.4      checkmate_2.0.0 
+#&gt; [21] rmarkdown_2.1    labeling_0.3     munsell_0.5.0    broom_0.5.5     
+#&gt; [25] compiler_3.6.1   httpuv_1.5.2     modelr_0.1.6     xfun_0.12       
+#&gt; [29] pkgconfig_2.0.3  htmltools_0.4.0  tidyselect_1.0.0 workflowr_1.6.2 
+#&gt; [33] fansi_0.4.0      crayon_1.3.4     dbplyr_1.4.2     withr_2.2.0     
+#&gt; [37] later_1.0.0      grid_3.6.1       nlme_3.1-144     jsonlite_1.6.1  
+#&gt; [41] gtable_0.3.0     lifecycle_0.2.0  DBI_1.1.0        git2r_0.26.1    
+#&gt; [45] magrittr_1.5     scales_1.1.0     cli_2.0.2        stringi_1.4.6   
+#&gt; [49] farver_2.0.3     fs_1.4.1         promises_1.1.0   xml2_1.3.1      
+#&gt; [53] ellipsis_0.3.0   generics_0.0.2   vctrs_0.2.4      tools_3.6.1     
+#&gt; [57] glue_1.4.0       hms_0.5.3        yaml_2.2.1       colorspace_1.4-1
+#&gt; [61] gt_0.2.0.5       rvest_0.3.5      knitr_1.28       haven_2.2.0     
+#&gt; [65] sass_0.2.0</code></pre>
+</div>
+</div>
+</div>
+
+
+<!-- Adjust MathJax settings so that all math formulae are shown using
+TeX fonts only; see
+http://docs.mathjax.org/en/latest/configuration.html.  This will make
+the presentation more consistent at the cost of the webpage sometimes
+taking slightly longer to load. Note that this only works because the
+footer is added to webpages before the MathJax javascript. -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    "HTML-CSS": { availableFonts: ["TeX"] }
+  });
+</script>
+
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open')
+  });
+});
+</script>
+
+<!-- code folding -->
+
+<script>
+$(document).ready(function ()  {
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_').toLowerCase();
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
