@@ -14,4 +14,4 @@ Content
 
  1. [Introduction](01_introduction.html)
  2. [Reorganizing the data set](02_reorganize_data.html)
- 3. [Exploration](03_exploration_data.html)
+ 3. [Exploration](03_exploration_links_data.html)

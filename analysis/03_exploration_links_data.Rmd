@@ -140,7 +140,8 @@ dip_texts %>%
   filter(edition == "2017-05-31") %>% 
   select(position_fct, text, links, hattip_name, hattips) %>% 
   gt::gt() %>% 
-    gt::cols_width(vars(text, links) ~ px(550))
+    gt::cols_width(vars(text, links) ~ px(400)) %>% 
+    gt::tab_options(table.font.size = 12)
 
 ```
 
