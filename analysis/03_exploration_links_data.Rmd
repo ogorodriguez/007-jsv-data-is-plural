@@ -97,6 +97,8 @@ dip_links %>%
 
 ```
 
+We can see a quasi-normal distribution here.  I added the lines to identify where the mean and the median values are.  They are actually pretty close.  One edition has 35 links in it. As can also be seen in the boxplot representation next.
+
 
 Boxplot
 
@@ -121,7 +123,7 @@ dip_links %>%
 
 In both graphs above we can see that mean and median values of the total number of links in an edition (newsletter is the same.)  Average number of links in a newsletter is 18.  And 50% of the number of newsletter have 18 links or less, 50% have 18 or more links.  It is a bit normally distributed.  There is a little skewness to the left.  
 
-Which is the edition with 36 links?
+Which is the edition with the most links (35)?
 
 ```{r}
 dip_links %>% 
@@ -138,8 +140,10 @@ dip_texts %>%
   filter(edition == "2017-05-31") %>% 
   select(position_fct, text, links, hattip_name, hattips) %>% 
   gt::gt() %>% 
-    gt::cols_width(vars(text, links) ~ px(500))
+    gt::cols_width(vars(text, links) ~ px(550))
 
 ```
+
+One of the entries of this edition is reference to a lot of datasets regarding payroll data from the USA Federal Government obtained by the Freedom of Information act, Data from Lobbyists, Financial data providad by a professor at NYU, Fire arms laws, and NYC dog names.
 
 
